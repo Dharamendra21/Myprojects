@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Stopwatch</title>
+    <style>
+        body {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            font-family: Arial, sans-serif;
+            background-color: #f0f0f0;
+        }
+        .stopwatch {
+            text-align: center;
+        }
+        .time {
+            font-size: 48px;
+            margin-bottom: 20px;
+        }
+        .buttons button {
+            font-size: 16px;
+            padding: 10px 20px;
+            margin: 5px;
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+    <div class="stopwatch">
+        <div class="time" id="display">00:00:00:00</div>
+        <div class="buttons">
+            <button onclick="start()">Start</button>
+            <button onclick="stop()">Stop</button>
+            <button onclick="reset()">Reset</button>
+        </div>
+    </div>
+
+    <script>
+        let timer;
+        let isRunning = false;
+        let [hours, minutes, seconds, milliseconds] = [0, 0, 0, 0];
+
+        function updateDisplay() {
+            const display = document.getElementById('display');
+            display.textContent = `${String(hours).padStart(2, '0')}:${String(minutes).padStart(2, '0')}:${String(seconds).padStart(2, '0')}:${String(milliseconds).padStart(2, '0')}`;
+        }
+
+        function start() {
+            if (!isRunning) {
+                isRunning = true;
+                timer = setInterval(() => {
+                    milliseconds++;
+                    if(milliseconds === 100){
+                        milliseconds = 0;
+                        seconds++;
+                        if (seconds === 60) {
+                            seconds = 0;
+                            minutes++;
+                            if (minutes === 60) {
+                                minutes = 0;
+                                hours++;
+                            }
+                        }
+                    }
+                    updateDisplay();
+                }, 10);
+            }
+        }
+
+        function stop() {
+            if (isRunning) {
+                clearInterval(timer);
+                isRunning = false;
+            }
+        }
+
+        function reset() {
+            clearInterval(timer);
+            isRunning = false;
+            [hours, minutes, seconds, milliseconds] = [0, 0, 0, 0];
+            updateDisplay();
+        }
+    </script>
+</body>
+</html>
